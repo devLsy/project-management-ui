@@ -2,6 +2,7 @@
 
 ## Initialize
 npm install
+
 npm create vite@latest
 y
 
