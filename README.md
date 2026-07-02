@@ -3,7 +3,7 @@
 ## Initialize
 npm install
 
-npm create vite@latest
+npm create vite@latest .
 y
 
 Project name
