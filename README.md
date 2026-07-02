@@ -3,11 +3,8 @@
 ## Initialize
 npm install
 
+#현재 폴더에 생성
 npm create vite@latest .
-y
-
-Project name
-enter
 
 Select a framework
 React
