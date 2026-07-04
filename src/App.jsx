@@ -28,6 +28,8 @@ function App() {
       console.log('프로젝트 생성 성공:', response.data);
       alert('프로젝트가 성공적으로 생성되었습니다.');
       setProjectName('');
+      setDescription('');
+      loadProjects();
     } catch (error) {
       console.error('프로젝트 생성 실패:', error);
       alert('프로젝트 생성에 실패했습니다.');
@@ -51,57 +53,135 @@ function App() {
     loadProjects();
   }, []);
 
-  return (
-    <div className="container">
+    return (
+      <div className="min-h-screen bg-slate-100 p-10">
 
-      <h1>React Project Tracker</h1>
+        <div className="max-w-7xl mx-auto">
 
-      <div>
+          <h1 className="text-5xl font-bold mb-10">
+            React Project Tracker
+          </h1>
 
-        <input
-          type="text"
-          placeholder="프로젝트명 입력"
-          value={projectName}
-          onChange={handleChange}
-        />
+          {/* 입력 영역 */}
 
-        <input
-          type="text"
-          placeholder="설명 입력"
-          value={description}
-          onChange={handleDescriptionChange}
-        />
+          <div className="bg-white rounded-2xl shadow p-6 mb-8">
 
-        <button onClick={handleAdd}>
-          추가
-        </button>
+            <div className="flex gap-4">
+
+              <input
+                className="flex-1 border rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="프로젝트명 입력"
+                value={projectName}
+                onChange={(e)=>setProjectName(e.target.value)}
+              />
+
+              <input
+                className="flex-1 border rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="설명 입력"
+                value={description}
+                onChange={(e)=>setDescription(e.target.value)}
+              />
+
+              <button
+                onClick={handleAdd}
+                className="w-44 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
+              >
+                + 추가
+              </button>
+
+            </div>
+
+          </div>
+
+          {/* 리스트 */}
+
+          <div className="bg-white rounded-2xl shadow overflow-hidden">
+
+            <table className="w-full">
+
+              <thead className="bg-blue-50">
+
+                <tr className="text-blue-900">
+
+                  <th className="p-5 w-24">No</th>
+                  <th className="text-left">프로젝트명</th>
+                  <th className="text-left">설명</th>
+                  <th className="w-48">등록일</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {projects.map((p,index)=>(
+
+                  <tr
+                    key={p.id}
+                    className="border-b hover:bg-slate-50"
+                  >
+
+                    <td className="text-center py-6">
+                      #{p.id ?? index+1}
+                    </td>
+
+                    <td className="font-semibold">
+                      {p.name}
+                    </td>
+
+                    <td className="text-gray-500">
+                      {p.description}
+                    </td>
+
+                    <td className="text-center text-gray-500">
+                      {p.createdAt}
+                    </td>
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+            {/* Footer */}
+
+            <div className="flex justify-between items-center p-6">
+
+              <div className="text-gray-600">
+                전체 <span className="font-bold">{projects.length}</span>건
+              </div>
+
+              <div className="flex gap-2">
+
+                <button className="border rounded px-3 py-2">
+                  &lt;
+                </button>
+
+                <button className="bg-blue-600 text-white rounded px-4 py-2">
+                  1
+                </button>
+
+                <button className="border rounded px-3 py-2">
+                  &gt;
+                </button>
+
+              </div>
+
+              <select className="border rounded-lg px-3 py-2">
+                <option>10개씩 보기</option>
+                <option>20개씩 보기</option>
+                <option>50개씩 보기</option>
+              </select>
+
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
-
-      <table border="1">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>프로젝트명</th>
-          <th>설명</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        {projects.map((project) => (
-          <tr key={project.id}>
-            <td>{project.id}</td>
-            <td>{project.name}</td>
-            <td>{project.description}</td>
-          </tr>
-        ))}
-
-      </tbody>
-    </table>
-
-    </div>
-  )
+  );
 }
 
 export default App
