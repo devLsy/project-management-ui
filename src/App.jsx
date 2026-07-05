@@ -53,133 +53,97 @@ function App() {
     loadProjects();
   }, []);
 
-    return (
+  return (
       <div className="min-h-screen bg-slate-100 p-10">
-
         <div className="max-w-7xl mx-auto">
-
           <h1 className="text-5xl font-bold mb-10">
             React Project Tracker
           </h1>
 
           {/* 입력 영역 */}
-
           <div className="bg-white rounded-2xl shadow p-6 mb-8">
-
             <div className="flex gap-4">
-
               <input
                 className="flex-1 border rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="프로젝트명 입력"
                 value={projectName}
                 onChange={(e)=>setProjectName(e.target.value)}
               />
-
               <input
                 className="flex-1 border rounded-xl px-5 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="설명 입력"
                 value={description}
                 onChange={(e)=>setDescription(e.target.value)}
               />
-
               <button
                 onClick={handleAdd}
                 className="w-44 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700"
               >
                 + 추가
               </button>
-
             </div>
-
           </div>
 
           {/* 리스트 */}
-
           <div className="bg-white rounded-2xl shadow overflow-hidden">
-
             <table className="w-full">
-
               <thead className="bg-blue-50">
-
                 <tr className="text-blue-900">
-
                   <th className="p-5 w-24">No</th>
                   <th className="text-left">프로젝트명</th>
                   <th className="text-left">설명</th>
                   <th className="w-48">등록일</th>
-
                 </tr>
-
               </thead>
-
               <tbody>
-
                 {projects.map((p,index)=>(
-
                   <tr
                     key={p.id}
                     className="border-b hover:bg-slate-50"
                   >
-
                     <td className="text-center py-6">
                       #{p.id ?? index+1}
                     </td>
-
                     <td className="font-semibold">
                       {p.name}
                     </td>
-
                     <td className="text-gray-500">
                       {p.description}
                     </td>
-
                     <td className="text-center text-gray-500">
                       {p.createdAt}
                     </td>
                   </tr>
-
                 ))}
-
               </tbody>
-
             </table>
 
             {/* Footer */}
-
             <div className="flex justify-between items-center p-6">
-
               <div className="text-gray-600">
                 전체 <span className="font-bold">{projects.length}</span>건
               </div>
 
+              {/* 페이지네이션 */}
               <div className="flex gap-2">
-
-                <button className="border rounded px-3 py-2">
+                <button className="border border-slate-200 rounded-xl px-4 py-3 text-slate-400 bg-white hover:bg-slate-50">
                   &lt;
                 </button>
-
-                <button className="bg-blue-600 text-white rounded px-4 py-2">
+                <button className="bg-blue-600 text-white rounded-xl px-5 py-3 font-semibold shadow">
                   1
                 </button>
-
-                <button className="border rounded px-3 py-2">
+                <button className="border border-slate-200 rounded-xl px-4 py-3 text-slate-400 bg-white hover:bg-slate-50">
                   &gt;
                 </button>
-
               </div>
-
-              <select className="border rounded-lg px-3 py-2">
+              <select className="border border-slate-200 rounded-xl px-5 py-3 bg-white text-slate-700">
                 <option>10개씩 보기</option>
                 <option>20개씩 보기</option>
                 <option>50개씩 보기</option>
               </select>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
   );
 }
