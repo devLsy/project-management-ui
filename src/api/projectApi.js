@@ -11,6 +11,12 @@ export const createProject = (projectName, description) => {
 }
 
 // 조회 API
-export const getProjects = () => {
-    return axios.get(API_URL);
-}
+export const getProjects = (keyword, page = 0, size = 10) => {
+  return axios.get(API_URL, {
+    params: {
+      keyword,
+      page,
+      size
+    },
+  });
+};

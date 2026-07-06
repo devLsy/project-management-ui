@@ -1,1 +1,28 @@
 @import "tailwindcss";
+
+button {
+  cursor: pointer;
+}
+
+select {
+  cursor: pointer;
+}
+
+/* 페이지 버튼 공통 */
+.btn-page {
+  @apply border border-slate-200 rounded-lg px-4 py-2 text-sm bg-white text-slate-500 hover:bg-slate-50 transition;
+}
+
+/* 현재 페이지 */
+.btn-page-active {
+  @apply bg-blue-600 text-white border-blue-600 font-medium shadow;
+}
+
+/* 비활성 */
+.btn-page:disabled {
+  @apply bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed shadow-none;
+}
+
+.btn-page:disabled:hover {
+  @apply bg-slate-100;
+}
