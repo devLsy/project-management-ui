@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { createProject, getProjects } from './api/projectApi';
+import { createProject, getProjects, getProjectDetails, updateProject } from './api/projectApi';
 
 function App() {
   const [projects, setProjects] = useState([]);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   // 검색
   const [searchType, setSearchType] = useState('name');
@@ -22,7 +23,7 @@ function App() {
   const projectNameRef = useRef(null);
 
   // 프로젝트 조회
-  const loadProjects = async (nextPage = page, nextSize = pageSize) => {  
+  const loadProjects = async (nextPage = page, nextSize = pageSize) => {
     try {
       const response = await getProjects(keyword, nextPage, nextSize);
 
@@ -37,12 +38,27 @@ function App() {
     }
   };
 
+  // 프로젝트 상세 조회
+  const loadProjectDetails = async (projectId) => { 
+    try {
+      const response = await getProjectDetails(projectId);  
+      setSelectedProjectId(response.data.id);
+      setProjectName(response.data.name);
+      setDescription(response.data.description);
+      setIsModalOpen(true); 
+    } catch (error) {
+      console.error('프로젝트 상세 조회 실패:', error);
+      throw error;
+    }
+  };
+
     useEffect(() => {
       loadProjects();
   }, []);
 
     // 모달 열기
   const openModal = () => {
+    setSelectedProjectId(null);
     setProjectName('');
     setDescription('');
     setIsModalOpen(true);
@@ -53,14 +69,6 @@ function App() {
     setIsModalOpen(false);
   };
 
-  const handleChange = (e) => {
-    setProjectName(e.target.value);
-  };
-
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-
   // 프로젝트 등록
   const handleAdd = async () => {
     if(projectName.trim() === '') {
@@ -69,17 +77,27 @@ function App() {
       return;
     }
 
-    if(!confirm('프로젝트를 추가하시겠습니까?')) return;
+    if(!confirm('저장 하시겠습니까?')) return;
 
     try {
-      const response = await createProject(projectName, description);
-      console.log('프로젝트 생성 성공:', response.data);
-      alert('프로젝트가 성공적으로 생성되었습니다.');
+
+      const project = {
+        projectName,
+        description,
+      };
+
+      if (selectedProjectId === null) {
+        await createProject(project);
+      } else {
+        await updateProject(selectedProjectId, project);
+      }
+
+      alert('저장되었습니다.');
       closeModal();
       loadProjects();
     } catch (error) {
       console.error('프로젝트 생성 실패:', error);
-      alert('프로젝트 생성에 실패했습니다.');
+      alert('저장에 실패했습니다.');
     }
   };
 
@@ -151,6 +169,7 @@ function App() {
               {projects.map((p, index) => (
                 <tr
                   key={p.id ?? index}
+                  onClick={() => loadProjectDetails(p.id)}
                   className="border-b border-slate-100 hover:bg-slate-50"
                 >
                   <td className="p-4 text-center text-slate-500">
@@ -230,7 +249,7 @@ function App() {
           <div className="w-full max-w-md rounded-xl bg-white shadow-lg">
             <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
               <h2 className="text-lg font-semibold">
-                프로젝트 등록
+                {selectedProjectId === null ? '프로젝트 등록' : '프로젝트 수정'}
               </h2>
 
               <button
